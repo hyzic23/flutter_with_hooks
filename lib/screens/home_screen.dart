@@ -30,7 +30,28 @@ class HomeScreenWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
-                child: Text('Drawer Head'))
+                child: Text('Drawer Head')),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Item 3'),
+              onTap: () {
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            )
           ],
         ),
       ),
