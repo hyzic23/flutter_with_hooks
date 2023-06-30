@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_with_hooks_app/models/api_response.dart';
 import 'package:flutter_with_hooks_app/models/user.dart';
 import 'package:flutter_with_hooks_app/screens/home_screen.dart';
 import 'package:http/http.dart' as http;
@@ -37,6 +36,28 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late Future<User> user;
+  //late User user;
+
+  Future<User> login(String username, String password) async {
+    //User Login(String username, String password) async {
+    var url = Uri.http('localhost:5096', '/api/User/authenticate-users');
+    //var url = Uri.http('localhost:7210', '/api/User/authenticate-users');
+    Map<String, String> headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json',
+    };
+
+    final jsonRequest =
+        jsonEncode({'username': username, 'password': password});
+    final response = await http.post(url, headers: headers, body: jsonRequest);
+    //print('Response <<<>>> ${jsonDecode(response.body)}');
+    if (response.statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   //Future<ApiResponse> Login(String username, String password) async {
   // ApiResponse apiResponse = new ApiResponse();
@@ -139,8 +160,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+
+                      // user =
+                      //     Login(emailController.text, passwordController.text);
+                      //Future<User> responseUser =
+                      //login(emailController.text, passwordController.text);
+                      //User users = responseUser as User;
+                      //print('${users.username}');
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) =>
+                      //             HomeScreen(user: users.username)));
+
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => const HomeScreen()));
+
                       // Navigate the user to the Home page
                       // Future<ApiResponse> response =
                       //     Login(emailController.text, passwordController.text);
