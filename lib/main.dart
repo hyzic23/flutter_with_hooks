@@ -1,8 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_with_hooks_app/models/user.dart';
 import 'package:flutter_with_hooks_app/screens/home_screen.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+//import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,73 +36,23 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   late Future<User> user;
-  //late User user;
+  final dio = Dio();
 
-  Future<User> login(String username, String password) async {
-    //void login(String username, String password) async {
-    //var url = Uri.http('localhost:5096', '/api/User/authenticate-users');
+  Future<User> validateUser(String username, String password) async {
     const url = 'http://localhost:5096/api/User/authenticate-users';
-    final uri = Uri.parse(url);
-    Map<String, String> headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-    };
+    Response response =
+        await dio.post(url, data: {'username': username, 'password': password});
+    User userObject = User.fromJson(response.data);
 
-    final jsonRequest =
-        jsonEncode({'username': username, 'password': password});
-    http.Response response =
-        await http.post(uri, headers: headers, body: jsonRequest);
-    final body = response.body;
-    final Map<String, dynamic> parsed = json.decode(body);
-    String responseUsername = parsed['username'];
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+    // Fluttertoast.showToast(
+    //     msg: "Login Successfull", backgroundColor: Colors.cyan);
 
-    User userObject = User.fromJson(parsed as Map<String, dynamic>);
-    print('User Object Username is ${userObject.username}');
-    //final jsonEncodeBody = jsonEncode(body);
-
-    //final json = jsonDecode(body);
-    //print('Response <<<>>> ${jsonDecode(json)}');
-    // if (response.statusCode == 200) {
-    //   //return User.fromJson(jsonDecode(response.body));
-    // } else {
-    //   throw Exception('Failed to load album');
-    // }
     return userObject;
   }
-
-  //Future<ApiResponse> Login(String username, String password) async {
-  // ApiResponse apiResponse = new ApiResponse();
-  // var url = Uri.http('localhost:5096', '/api/User/authenticate-users');
-  // Map<String, String> headers = {
-  //   'content-type': 'application/json',
-  //   'accept': 'application/json',
-  // };
-
-  // final jsonRequest =
-  //     jsonEncode({'username': username, 'password': password});
-
-  // var response = await http.post(url, headers: headers, body: jsonRequest);
-  // final responseData = jsonDecode(response.body) as Map<String, dynamic>;
-  // print('respponse <<<<<<<||>>>>>>> : $responseData');
-
-  // User user = User.fromJson(jsonDecode(response.body));
-  // print('User Response <<<<<<<||>>>>>>> : ${user.username}');
-
-  // apiResponse.Data = User.fromJson(jsonDecode(response.body));
-
-  // User userResponse = apiResponse.Data as User;
-  //if (userResponse.username != null) {
-  // Navigator.of(context)
-  //     .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
-
-  // Navigator.pushNamedAndRemoveUntil(
-  //   context, => HomeScreen(), ModalRoute.withName('/home'),
-  //   arguments: (apiResponse.Data as User));
-  // }
-  //print('User <<<<<<<||>>>>>>> : ${us.username}');
-
-  //return apiResponse;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +126,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       //     MaterialPageRoute(
                       //         builder: (context) => HomeScreen()));
 
-                      Future<User> responseUser =
-                          login(emailController.text, passwordController.text);
-                      print('ONclick Response ${responseUser}');
+                      Future<User> response = validateUser(
+                          emailController.text, passwordController.text);
+
+                      //print('Onclick Response ${response}');
+
+                      // Future<User> responseUser =
+                      //     login(emailController.text, passwordController.text);
+                      // print('ONclick Response ${responseUser}');
                       //Future<User> responseUser =
                       //login(emailController.text, passwordController.text);
                       //User users = responseUser as User;
