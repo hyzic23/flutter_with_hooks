@@ -12,9 +12,16 @@ class User {
   //   password = json['password'];
   // }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //       id: json['id'], username: json['username'], password: json['password']);
+  // }
+
+  factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
-        id: json['id'], username: json['username'], password: json['password']);
+        id: parsedJson['id'],
+        username: parsedJson['username'].toString(),
+        password: parsedJson['password'].toString());
   }
 
   //Export to json

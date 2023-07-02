@@ -32,7 +32,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //final GlobalKey _formKey = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -40,9 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
   //late User user;
 
   Future<User> login(String username, String password) async {
-    //User Login(String username, String password) async {
-    var url = Uri.http('localhost:5096', '/api/User/authenticate-users');
-    //var url = Uri.http('localhost:7210', '/api/User/authenticate-users');
+    //void login(String username, String password) async {
+    //var url = Uri.http('localhost:5096', '/api/User/authenticate-users');
+    const url = 'http://localhost:5096/api/User/authenticate-users';
+    final uri = Uri.parse(url);
     Map<String, String> headers = {
       'content-type': 'application/json',
       'accept': 'application/json',
@@ -50,13 +50,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final jsonRequest =
         jsonEncode({'username': username, 'password': password});
-    final response = await http.post(url, headers: headers, body: jsonRequest);
-    //print('Response <<<>>> ${jsonDecode(response.body)}');
-    if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load album');
-    }
+    http.Response response =
+        await http.post(uri, headers: headers, body: jsonRequest);
+    final body = response.body;
+    final Map<String, dynamic> parsed = json.decode(body);
+    String responseUsername = parsed['username'];
+
+    User userObject = User.fromJson(parsed as Map<String, dynamic>);
+    print('User Object Username is ${userObject.username}');
+    //final jsonEncodeBody = jsonEncode(body);
+
+    //final json = jsonDecode(body);
+    //print('Response <<<>>> ${jsonDecode(json)}');
+    // if (response.statusCode == 200) {
+    //   //return User.fromJson(jsonDecode(response.body));
+    // } else {
+    //   throw Exception('Failed to load album');
+    // }
+    return userObject;
   }
 
   //Future<ApiResponse> Login(String username, String password) async {
@@ -160,13 +171,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => HomeScreen()));
 
-                      // user =
-                      //     Login(emailController.text, passwordController.text);
+                      Future<User> responseUser =
+                          login(emailController.text, passwordController.text);
+                      print('ONclick Response ${responseUser}');
                       //Future<User> responseUser =
                       //login(emailController.text, passwordController.text);
                       //User users = responseUser as User;
