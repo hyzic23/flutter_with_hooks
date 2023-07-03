@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: LoginScreen(),
@@ -27,6 +27,8 @@ class _MyAppState extends State<MyApp> {
 }
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -45,6 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Response response = await dio
           .post(url, data: {'username': username, 'password': password});
       userResponse = User.fromJson(response.data);
+      String userN = userResponse.username;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const HomeScreen(
+                  //username: userN,
+                  )));
 
       // Navigator.pushNamed(
       //     context, MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -72,6 +81,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return userResponse;
   }
 
+  Future<User?> validateDummyUser(String username, String password) async {
+    if (username == 'admin' && password == 'admin') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    } else {}
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 200.0),
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                       width: 200,
                       height: 150,
                       child: Image.asset('assets/desire_logoo.png')),
@@ -139,31 +156,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Future<User?> response = validateUser(
+                      validateDummyUser(
                           emailController.text, passwordController.text);
+                      // validateUser(
+                      //     emailController.text, passwordController.text);
 
-                      //print(
-                      //    'Onclick Response ${response.then((value) => value!.username)}');
-
-                      // Future<User> responseUser =
-                      //     login(emailController.text, passwordController.text);
-                      // print('ONclick Response ${responseUser}');
-                      //Future<User> responseUser =
-                      //login(emailController.text, passwordController.text);
-                      //User users = responseUser as User;
-                      //print('${users.username}');
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             HomeScreen(user: users.username)));
-
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => const HomeScreen()));
-
-                      // Navigate the user to the Home page
-                      // Future<ApiResponse> response =
-                      //     Login(emailController.text, passwordController.text);
+                      // Future<User?> response = validateUser(
+                      //     emailController.text, passwordController.text);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Please fill input')),

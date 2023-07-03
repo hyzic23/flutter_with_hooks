@@ -1,10 +1,10 @@
 class ApiResponse {
-  Object _data = new Object();
-  Object _error = new Object();
+  Object _data = Object();
+  Object _error = Object();
 
   Object get Data => _data;
   set Data(Object data) => _data = data;
 
-  Object get ApiError => _error as Object;
+  Object get ApiError => _error;
   set ApiError(Object error) => _error = error;
 }
