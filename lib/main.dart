@@ -38,20 +38,38 @@ class _LoginScreenState extends State<LoginScreen> {
   late Future<User> user;
   final dio = Dio();
 
-  Future<User> validateUser(String username, String password) async {
+  Future<User?> validateUser(String username, String password) async {
     const url = 'http://localhost:5096/api/User/authenticate-users';
-    Response response =
-        await dio.post(url, data: {'username': username, 'password': password});
-    User userObject = User.fromJson(response.data);
+    User? userResponse;
+    try {
+      Response response = await dio
+          .post(url, data: {'username': username, 'password': password});
+      userResponse = User.fromJson(response.data);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+      // Navigator.pushNamed(
+      //     context, MaterialPageRoute(builder: (context) => const HomeScreen()),
+      //     arguments: userResponse);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print('Dio error!');
+        print('STATUS: ${e.response?.statusCode}');
+        print('DATA: ${e.response?.data}');
+        print('HEADERS: ${e.response?.headers}');
+      } else {
+        // Error due to setting up or sending the request
+        print('Error sending request!');
+        print(e.message);
+      }
+    }
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => HomeScreen()),
+    // );
     // Fluttertoast.showToast(
     //     msg: "Login Successfull", backgroundColor: Colors.cyan);
 
-    return userObject;
+    return userResponse;
   }
 
   @override
@@ -121,15 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => HomeScreen()));
-
-                      Future<User> response = validateUser(
+                      Future<User?> response = validateUser(
                           emailController.text, passwordController.text);
 
-                      //print('Onclick Response ${response}');
+                      //print(
+                      //    'Onclick Response ${response.then((value) => value!.username)}');
 
                       // Future<User> responseUser =
                       //     login(emailController.text, passwordController.text);
