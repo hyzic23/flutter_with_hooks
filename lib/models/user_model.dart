@@ -1,3 +1,6 @@
+import 'package:flutter_with_hooks_app/models/user_name.dart';
+import 'package:flutter_with_hooks_app/models/user_picture.dart';
+
 class UserModel {
   final String gender;
   final String email;
@@ -5,6 +8,7 @@ class UserModel {
   final String cell;
   final String nat;
   final UserName name;
+  final UserPicture image;
 
   UserModel(
       {required this.gender,
@@ -12,13 +16,10 @@ class UserModel {
       required this.phone,
       required this.cell,
       required this.nat,
-      required this.name});
-}
+      required this.name,
+      required this.image});
 
-class UserName {
-  final String title;
-  final String first;
-  final String last;
-
-  UserName({required this.title, required this.first, required this.last});
+  String get fullName {
+    return '${name.title} ${name.first} ${name.last}';
+  }
 }

@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_with_hooks_app/models/user_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_with_hooks_app/service/user_api.dart';
 
 class HomeScreen extends StatefulWidget {
-  //final String? username;
   const HomeScreen({super.key});
-  //const HomeScreen({super.key, required this.username});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,44 +30,17 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
   @override
   void initState() {
-    print('Init Method');
     setState(() {
-      print('Init SetState Method');
       fetchUsers();
     });
     super.initState();
   }
 
-  void fetchUsers() async {
-    print('Calling FetchUsers API');
-    const url = 'https://randomuser.me/api/?results=20';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    //final response = await dio.get(url);
-    // final response = await dio.get(url);
-    //final result = response.data;
-    final json = jsonDecode(response.body);
-    final results = json['results'] as List<dynamic>;
-    final transformed = results.map((user) {
-      final name = UserName(
-          title: user['name']['title'],
-          first: user['name']['first'],
-          last: user['name']['last']);
-
-      return UserModel(
-          gender: user['gender'],
-          email: user['email'],
-          phone: user['phone'],
-          cell: user['cell'],
-          nat: user['nat'],
-          name: name);
-    }).toList();
-
+  Future<void> fetchUsers() async {
+    final response = await UserApi.fetchUsers();
     setState(() {
-      users = transformed;
-      //users = json['results'];
+      users = response;
     });
-    print('Fetch Users completed');
   }
 
   @override
@@ -81,23 +50,17 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
         title: const Text('Home Page'),
         centerTitle: true,
       ),
-      //body: const Text('Hello'),
       body: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(), // new
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final email = user.email;
           //final color = user.gender == 'male' ? Colors.blue : Colors.green;
-          // final email = user['email'];
-          // final name = user['name']['first'];
-          // final imageUrl = user['picture']['thumbnail'];
           return ListTile(
-            // leading: ClipRRect(
-            //   borderRadius: BorderRadius.circular(100),
-            //   child: Image.network(imageUrl),
-            // ),
-            title: Text(user.name.first),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(user.image.thumbnail),
+            ),
+            title: Text(user.fullName),
             subtitle: Text(user.phone),
             //tileColor: color,
             //subtitle: Text(name),
