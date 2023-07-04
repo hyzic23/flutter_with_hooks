@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   //final String? username;
@@ -32,24 +33,29 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
   @override
   void initState() {
-    fetchUsers();
+    print('Init Method');
+    setState(() {
+      print('Init SetState Method');
+      fetchUsers();
+    });
     super.initState();
   }
 
   void fetchUsers() async {
     print('Calling FetchUsers API');
-    const url = 'https://randomuser.me/api/?results=2';
-    //final uri = Uri.parse(url);
-    final response = await dio.get(url);
-    final result = response.data;
-    print('Body Response ${result['results']}');
-    print('Body Email ${result['email']}');
-    //final json = jsonDecode(body);
-    //print('Json Response $json');
+    const url = 'https://randomuser.me/api/?results=10';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    //final response = await dio.get(url);
+    // final response = await dio.get(url);
+    //final result = response.data;
+    final json = jsonDecode(response.body);
+    users = json['results'];
+    print('Body Results ${json['results']}');
 
-    // setState(() {
-    //   users = result['results'];
-    // });
+    setState(() {
+      users = json['results'];
+    });
     print('Fetch Users completed');
   }
 
@@ -60,17 +66,31 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
         title: const Text('Home Page'),
         centerTitle: true,
       ),
+      //body: const Text('Hello'),
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
           final email = user['email'];
+          final name = user['name']['first'];
+          final imageUrl = user['picture']['thumbnail'];
           return ListTile(
-            leading: users[index],
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(imageUrl),
+            ),
             title: Text(email),
+            subtitle: Text(name),
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              fetchUsers();
+            });
+          },
+          child: const Icon(Icons.add)),
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.6,
         child: Drawer(
