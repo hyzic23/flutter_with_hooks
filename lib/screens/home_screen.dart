@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_with_hooks_app/models/user_model.dart';
+import 'package:flutter_with_hooks_app/screens/add_beneficiary.dart';
 import 'package:flutter_with_hooks_app/service/user_api.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -101,6 +102,18 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                 onTap: () {
                   // Then close the drawer
                   Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Add Beneficiary'),
+                onTap: () {
+                  // Then close the drawer
+                  //Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddBeneficiary()));
                 },
               ),
               ListTile(
