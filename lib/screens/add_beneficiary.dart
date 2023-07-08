@@ -34,9 +34,10 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       key: formKey,
       children: [
-        dropDownForm(),
+        Center(child: dropDownForm()),
       ],
     );
   }
@@ -58,7 +59,7 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
             value: value,
             child: Text(
               value,
-              style: const TextStyle(fontSize: 30),
+              style: const TextStyle(fontSize: 17),
             ),
           );
         }).toList(),

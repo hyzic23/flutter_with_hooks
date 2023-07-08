@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_with_hooks_app/main.dart';
 import 'package:flutter_with_hooks_app/models/user_model.dart';
 import 'package:flutter_with_hooks_app/screens/add_beneficiary.dart';
 import 'package:flutter_with_hooks_app/service/user_api.dart';
@@ -42,6 +43,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     setState(() {
       users = response;
     });
+  }
+
+  signOut() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MyApp()));
   }
 
   @override
@@ -153,7 +159,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                 title: const Text('Logout'),
                 onTap: () {
                   // Then close the drawer
-                  Navigator.pop(context);
+                  //Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MyApp()));
                 },
               )
             ],
