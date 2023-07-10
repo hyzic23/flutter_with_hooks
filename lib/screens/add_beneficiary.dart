@@ -32,6 +32,7 @@ class AddBeneficiaryWidget extends StatefulWidget {
 class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
   final formKey = GlobalKey<FormState>();
   String dropDownValue = 'Dog';
+  bool? isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -40,21 +41,41 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
         //mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text('Please enter beneficiary details : ',
+                style: TextStyle(fontSize: 16)),
+          ),
           Padding(
+            //padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
             child: dropDownForm(),
           ),
-          //const SizedBox(height: 5),
+          const SizedBox(height: 5),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             child: firstNameField(),
           ),
           const SizedBox(height: 5),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             child: lastNameField(),
           ),
-          const SizedBox(height: 5)
+          // const SizedBox(height: 5),
+          // CheckboxListTile(
+          //   title: const Text('Checkbox List Tile'),
+          //   value: isChecked,
+          //   onChanged: (bool? newValue) {
+          //     setState(() {
+          //       isChecked = newValue;
+          //     });
+          //   },
+          //   activeColor: Colors.orangeAccent,
+          //   checkColor: Colors.white,
+          //   //subtitle: const Text('This is the subtitle'),
+          //   //controlAffinity: ListTileControlAffinity.leading,
+          //   //tristate: true,
+          // ),
         ],
       ),
     );
@@ -83,12 +104,12 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
         }).toList(),
       );
 
-  Widget firstNameField() => TextFormFieldWidget(
+  Widget firstNameField() => const TextFormFieldWidget(
         labelText: 'First Name',
         hintText: 'First Name',
       );
 
-  Widget lastNameField() => TextFormFieldWidget(
+  Widget lastNameField() => const TextFormFieldWidget(
         labelText: 'Last Name',
         hintText: 'Last Name',
       );
