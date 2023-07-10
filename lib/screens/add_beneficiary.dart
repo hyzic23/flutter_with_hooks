@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_with_hooks_app/widgets/drop_down_form_widget.dart';
+import 'package:flutter_with_hooks_app/widgets/text_form_field_widget.dart';
 
 class AddBeneficiary extends StatefulWidget {
   const AddBeneficiary({super.key});
@@ -33,12 +34,29 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
   String dropDownValue = 'Dog';
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Form(
       key: formKey,
-      children: [
-        Center(child: dropDownForm()),
-      ],
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
+            child: dropDownForm(),
+          ),
+          //const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
+            child: firstNameField(),
+          ),
+          const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 40, 20, 0.0),
+            child: lastNameField(),
+          ),
+          const SizedBox(height: 5)
+        ],
+      ),
     );
   }
 
@@ -63,5 +81,15 @@ class _AddBeneficiaryWidgetState extends State<AddBeneficiaryWidget> {
             ),
           );
         }).toList(),
+      );
+
+  Widget firstNameField() => TextFormFieldWidget(
+        labelText: 'First Name',
+        hintText: 'First Name',
+      );
+
+  Widget lastNameField() => TextFormFieldWidget(
+        labelText: 'Last Name',
+        hintText: 'Last Name',
       );
 }
