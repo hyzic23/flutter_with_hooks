@@ -39,7 +39,7 @@ dependencies:
   http: ^1.1.0
   dio: ^5.2.1+1
   fluttertoast: ^8.2.2
-  firebase_database: ^10.2.3
+  #firebase_database: ^10.2.3
 
 dev_dependencies:
   flutter_test:
